@@ -3,262 +3,252 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GostWears | Streetwear That Speaks Attitude</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <title>GostWears | Wear The Power</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+
   <style>
-    /* GLOBAL RESET */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #ffffff;
-      color: rgb(105, 104, 104);
-      scroll-behavior: smooth;
-      overflow-x: hidden;
+    body {
+      font-family: "Poppins", sans-serif;
+      margin: 0;
+      background: #fff;
+      color: #000;
     }
 
-    /* NAVBAR */
     header {
-      background: rgba(255, 255, 255, 0.9);
-      position: fixed;
-      width: 100%;
-      top: 0;
-      z-index: 1000;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .navbar {
-      max-width: 1200px;
-      margin: auto;
-      padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 20px 60px;
+      background: #111;
+      position: sticky;
+      top: 0;
+      z-index: 999;
     }
 
-    .logo {
-      font-size: 1.8rem;
+    header h1 {
+      color: #fff;
       font-weight: 700;
-      color: #ff9500;
+      letter-spacing: 1px;
     }
 
-    .nav-links {
-      display: flex;
-      gap: 1.5rem;
-      list-style: none;
-    }
-
-    .nav-links a {
+    nav a {
+      color: #fff;
       text-decoration: none;
-      color: white;
+      margin: 0 15px;
       font-weight: 500;
       transition: 0.3s;
     }
 
-    .nav-links a:hover {
-      color: #ff9500;
+    nav a:hover {
+      color: #e50914;
     }
 
-    .nav-buttons .btn {
-      margin-left: 1rem;
-      text-decoration: none;
-      background: #ffffff;
-      color: rgb(126, 126, 126);
-      padding: 0.6rem 1.2rem;
-      border-radius: 8px;
-      font-weight: 600;
-      transition: 0.3s;
-    }
-
-    .nav-buttons .btn:hover {
-      background: #ae8b5c;
-    }
-
-    /* HERO SECTION */
-    .hero {
-      height: 100vh;
-      background: 
-        linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
-        url('https://gostwear-frontend.vercel.app/img/men1.webp') center/cover no-repeat;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      color: rgb(0, 0, 0);
-      position: relative;
-      padding: 2rem;
-    }
-
-    .hero-content {
-      z-index: 10;
-      animation: fadeInUp 1.2s ease;
-    }
-
-    .hero h1 {
-      font-size: 3rem;
-      color: #000000;
-      font-weight: 700;
-    }
-
-    .hero p {
-      font-size: 1.2rem;
-      margin: 1rem 0 2rem 0;
-      color: #000000;
-    }
-
-    .hero .btn {
-      background: #ffffff;
-      color: rgb(255, 255, 255);
-      padding: 0.9rem 2rem;
-      border-radius: 8px;
+    .btn-red {
+      background: #e50914;
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 6px;
       font-weight: 600;
       text-decoration: none;
-      transition: 0.3s;
     }
 
-    .hero .btn:hover {
-      background: #ffa733;
-      transform: scale(1.05);
+    .btn-white {
+      background: #fff;
+      color: #111;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      text-decoration: none;
     }
 
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* SECTIONS */
-    .section {
-      padding: 6rem 2rem;
-      max-width: 1200px;
-      margin: auto;
+    section {
+      padding: 60px 20px;
       text-align: center;
     }
 
-    .section h2 {
-      font-size: 2rem;
-      color: #ff9500;
-      margin-bottom: 2rem;
-      position: relative;
-    }
-
-    /* PRODUCT GRID */
     .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
     }
 
     .product-card {
-      background: #111;
+      background: #fff;
       border-radius: 12px;
       overflow: hidden;
-      transition: 0.3s;
-      box-shadow: 0 0 15px rgba(255, 149, 0, 0.1);
+      width: 220px;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
     }
 
     .product-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 0 25px rgba(255, 149, 0, 0.25);
     }
 
     .product-card img {
       width: 100%;
       height: 260px;
       object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .product-card:hover img {
+      transform: scale(1.05);
     }
 
     .product-card p {
-      padding: 0.8rem;
-      color: #fff;
+      margin: 10px 0;
       font-weight: 500;
     }
 
-    .product-card button {
-      background: #ff9500;
-      color: black;
-      border: none;
-      width: 100%;
-      padding: 0.8rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .product-card button:hover {
-      background: #ffa733;
-    }
-
-    /* FOOTER */
     footer {
-      background: #0a0a0a;
+      background: #111;
+      color: #aaa;
+      padding: 60px 20px;
       text-align: center;
-      padding: 1.5rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      color: #999;
       font-size: 0.9rem;
     }
 
-    @media (max-width: 768px) {
-      .hero h1 { font-size: 2.2rem; }
-      .hero p { font-size: 1rem; }
-      .nav-links { display: none; }
+    footer h3 {
+      color: #fff;
+      margin-bottom: 30px;
+      letter-spacing: 1px;
+    }
+
+    footer img {
+      width: 90px;
+      opacity: 0.9;
+    }
+
+    footer a {
+      color: #ccc;
+      text-decoration: none;
+      margin: 0 10px;
+      transition: 0.3s;
+    }
+
+    footer a:hover {
+      color: #fff;
     }
   </style>
 </head>
 
 <body>
-  <!-- NAVBAR -->
+  <!-- ===== HEADER ===== -->
   <header>
-    <nav class="navbar">
-      <h1 class="logo">GostWears</h1>
-      <ul class="nav-links">
-        <li><a href="#men">Men</a></li>
-        <li><a href="#women">Women</a></li>
-        <li><a href="#kids">Kids</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-      <div class="nav-buttons">
-        <a href="login.html" class="btn">Login</a>
-        <a href="register.html" class="btn">Register</a>
-        <a href="checkout.html" class="btn">Cart</a>
+    <h1>GostWears</h1>
+    <nav>
+      <a href="#men">Men</a>
+      <a href="#women">Women</a>
+      <a href="#kids">Kids</a>
+      <a href="#contact">Contact</a>
 
-      </div>
+      <a id="loginBtn" href="login.html" class="btn-red">Login</a>
+      <a id="registerBtn" href="register.html" class="btn-white">Register</a>
+
+      <span id="userInfo" style="display:none; color:#fff;">
+        Welcome, <span id="userName"></span> |
+        <a href="#" id="logoutBtn" style="color:#e50914; text-decoration:none;">Logout</a>
+      </span>
     </nav>
   </header>
 
-  <!-- HERO -->
-  <section id="home" class="hero">
-  <div class="overlay"></div>
-  <div class="hero-content">
-    <h1>Wear The Power</h1>
-    <p>Streetwear that Speaks Attitude.</p>
-    <a href="#men" class="btn">Shop Now</a>
-  </div>
-</section>
-
-  <!-- MEN -->
-  <section id="men" class="section">
-    <h2>Men's Collection</h2>
-    <div id="men-grid" class="product-grid"></div>
+  <!-- ===== HERO SECTION ===== -->
+  <section id="home" style="position:relative; height:80vh; display:flex; flex-direction:column; justify-content:center; align-items:center; color:#fff; overflow:hidden;">
+    <div style="background:url('assets/img/hero.webp') center/cover no-repeat; position:absolute; inset:0; z-index:0; filter:brightness(55%); transition:0.6s;"></div>
+    <div style="z-index:2; text-align:center;">
+      <h1 style="font-size:3rem; margin-bottom:10px;">Wear The Power</h1>
+      <p style="font-size:1.2rem; margin-bottom:25px;">Streetwear that speaks attitude</p>
+      <a href="#men" class="btn-red" style="padding:12px 36px;">Shop Now</a>
+    </div>
   </section>
 
-  <!-- WOMEN -->
-  <section id="women" class="section">
-    <h2>Women's Collection</h2>
-    <div id="women-grid" class="product-grid"></div>
+  <!-- ===== MEN COLLECTION ===== -->
+  <section id="men">
+    <h2 style="font-size:2rem; margin-bottom:40px;">Men's Collection</h2>
+    <div class="product-grid" id="men-grid"></div>
   </section>
 
-  <!-- KIDS -->
-  <section id="kids" class="section">
-    <h2>Kids' Collection</h2>
-    <div id="kids-grid" class="product-grid"></div>
+  <!-- ===== WOMEN COLLECTION ===== -->
+  <section id="women" style="background:#f4f4f4;">
+    <h2 style="font-size:2rem; margin-bottom:40px;">Women's Collection</h2>
+    <div class="product-grid" id="women-grid"></div>
   </section>
 
-  <!-- FOOTER -->
+  <!-- ===== KIDS COLLECTION ===== -->
+  <section id="kids">
+    <h2 style="font-size:2rem; margin-bottom:40px;">Kids Collection</h2>
+    <div class="product-grid" id="kids-grid"></div>
+  </section>
+
+  <!-- ===== NEWSLETTER ===== -->
+  <section id="contact" style="background:#111; color:#fff;">
+    <h2>Join Our Newsletter</h2>
+    <p>Get updates about latest drops and exclusive discounts</p>
+    <input type="email" placeholder="Enter your email" style="padding:12px; width:250px; border:none; border-radius:6px; margin-top:20px;">
+    <button style="padding:12px 25px; margin-left:10px; background:#fff; color:#111; border:none; border-radius:6px; cursor:pointer;">Subscribe</button>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
   <footer>
-    © 2025 <strong>GostWears</strong> | Designed by Ash 🔥 | SBL Project
+    <h3>Trusted By</h3>
+    <div style="display:flex; justify-content:center; align-items:center; gap:60px; flex-wrap:wrap; margin-bottom:30px;">
+      <img src="assets/img/logo1.png" alt="Brand 1">
+      <img src="assets/img/logo2.png" alt="Brand 2">
+      <img src="assets/img/logo3.png" alt="Brand 3">
+      <img src="assets/img/logo4.png" alt="Brand 4">
+    </div>
+    <hr style="border:none; height:1px; background:#333; width:80%; margin:40px auto;">
+    <p>© 2025 <strong>GostWears</strong> — Designed by Ash | SBL Project</p>
+    <div>
+      <a href="#">Instagram</a> |
+      <a href="#">Twitter</a> |
+      <a href="#">YouTube</a>
+    </div>
   </footer>
 
-  <script src="assets/js/products.js"></script>
+  <!-- ===== PRODUCT RENDER SCRIPT ===== -->
+  <script>
+    const BACKEND_URL = "https://gostwear-backend.onrender.com/api/products";
+
+    async function fetchProducts() {
+      try {
+        const res = await fetch(BACKEND_URL);
+        const products = await res.json();
+
+        localStorage.setItem("allProducts", JSON.stringify(products));
+
+        renderProducts("men", "men-grid", products);
+        renderProducts("women", "women-grid", products);
+        renderProducts("kids", "kids-grid", products);
+      } catch (err) {
+        console.error("❌ Failed to fetch products:", err);
+      }
+    }
+
+    function renderProducts(category, containerId, products) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = "";
+      const filtered = products.filter(p => p.category === category);
+
+      filtered.forEach(p => {
+        const card = document.createElement("div");
+        card.classList.add("product-card");
+        card.innerHTML = `
+          <a href="product.html?id=${p.id}">
+            <img src="${p.image}" alt="${p.name}">
+          </a>
+          <p>${p.name} – ₹${p.price}</p>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    fetchProducts();
+  </script>
 </body>
 </html>
