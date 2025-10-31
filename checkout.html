@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GostWears | Checkout</title>
+  <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-bottom: 50px;
+    }
+
+    header {
+      width: 100%;
+      background: #111;
+      color: #ff9500;
+      text-align: center;
+      padding: 20px 0;
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      box-shadow: 0 0 10px rgba(255,149,0,0.3);
+    }
+
+    .checkout-container {
+      width: 90%;
+      max-width: 900px;
+      background: #111;
+      margin-top: 40px;
+      padding: 40px;
+      border-radius: 14px;
+      box-shadow: 0 0 30px rgba(255,149,0,0.15);
+      animation: fadeIn 1s ease;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #ff9500;
+      font-weight: 600;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding: 15px 0;
+    }
+
+    .cart-item img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .cart-item p {
+      margin: 0;
+      font-weight: 500;
+      color: #eee;
+    }
+
+    .total {
+      text-align: right;
+      margin-top: 25px;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #ff9500;
+    }
+
+    .payment-section {
+      margin-top: 40px;
+      padding: 25px;
+      background: #1a1a1a;
+      border-radius: 10px;
+      box-shadow: inset 0 0 15px rgba(255,149,0,0.1);
+    }
+
+    .payment-section h3 {
+      margin-bottom: 15px;
+      color: #ff9500;
+      font-weight: 600;
+    }
+
+    .payment-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      color: #ccc;
+    }
+
+    input[type="radio"] {
+      accent-color: #ff9500;
+      width: 18px;
+      height: 18px;
+    }
+
+    .checkout-btn {
+      display: block;
+      width: 100%;
+      background: #ff9500;
+      color: #000;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      margin-top: 25px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .checkout-btn:hover {
+      background: #ffa733;
+      transform: scale(1.03);
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      background: none;
+      border: none;
+      color: #ff9500;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+      margin-bottom: 25px;
+      transition: 0.3s;
+    }
+
+    .back-btn i { margin-right: 8px; }
+
+    .back-btn:hover { color: #ffa733; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .cart-item {
+        flex-direction: column;
+        text-align: center;
+      }
+      .cart-item img { margin-bottom: 10px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>GostWears Checkout</header>
+
+  <div class="checkout-container">
+    <button class="back-btn" onclick="window.location.href='index.html'">
+      <i class='bx bx-arrow-back'></i> Back to Home
+    </button>
+
+    <h2>Your Order Summary</h2>
+    <div id="orderList"></div>
+    <div class="total" id="orderTotal"></div>
+
+    <div class="payment-section">
+      <h3>Select Payment Method</h3>
+      <div class="payment-options">
+        <label><input type="radio" name="payment" value="upi" checked> UPI (Google Pay / PhonePe / Paytm)</label>
+        <label><input type="radio" name="payment" value="card"> Credit / Debit Card</label>
+        <label><input type="radio" name="payment" value="cod"> Cash on Delivery</label>
+      </div>
+    </div>
+
+    <button class="checkout-btn" onclick="proceedToGateway()">Proceed to Payment</button>
+  </div>
+
+  <script>
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const orderList = document.getElementById("orderList");
+    const orderTotal = document.getElementById("orderTotal");
+    let total = 0;
+
+    if (cart.length === 0) {
+      orderList.innerHTML = "<p style='text-align:center;color:#ccc;'>Your cart is empty.</p>";
+      document.querySelector(".checkout-btn").style.display = "none";
+    } else {
+      cart.forEach(item => {
+        const qty = item.qty || 1;
+        const subtotal = item.price * qty;
+        total += subtotal;
+
+        const itemDiv = document.createElement("div");
+        itemDiv.classList.add("cart-item");
+        itemDiv.innerHTML = `
+          <img src="${item.image}" alt="${item.name}">
+          <p>${item.name}</p>
+          <p>Qty: ${qty}</p>
+          <p>₹${subtotal}</p>
+        `;
+        orderList.appendChild(itemDiv);
+      });
+
+      orderTotal.textContent = "Total: ₹" + total.toLocaleString();
+    }
+
+    function proceedToGateway() {
+      const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+      localStorage.setItem("orderTotal", total);
+      localStorage.setItem("paymentMethod", paymentMethod);
+      window.location.href = "payment.html";
+    }
+  </script>
+</body>
+</html>

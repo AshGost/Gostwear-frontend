@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GostWears | Payment Gateway</title>
+  <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background: radial-gradient(circle at top, #0a0a0a 60%, #111);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: #111;
+      color: #ff9500;
+      padding: 20px 60px;
+      font-size: 1.8rem;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(255,149,0,0.2);
+      letter-spacing: 1px;
+      z-index: 10;
+    }
+
+    .payment-container {
+      background: #111;
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(255,149,0,0.15);
+      max-width: 450px;
+      width: 90%;
+      padding: 40px 30px;
+      margin-top: 120px;
+      text-align: center;
+      animation: fadeIn 0.8s ease;
+    }
+
+    .payment-container h2 {
+      color: #ff9500;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .summary {
+      background: #1a1a1a;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+      text-align: left;
+      box-shadow: inset 0 0 8px rgba(255,149,0,0.15);
+    }
+
+    .summary p {
+      margin: 6px 0;
+      color: #ddd;
+    }
+
+    .payment-option {
+      background: #1a1a1a;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 12px 0;
+      cursor: pointer;
+      transition: 0.3s;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .payment-option:hover {
+      background: #222;
+      transform: scale(1.02);
+    }
+
+    .payment-option.active {
+      border: 2px solid #ff9500;
+      box-shadow: 0 0 10px rgba(255,149,0,0.3);
+    }
+
+    .payment-option i {
+      font-size: 1.4rem;
+      color: #ff9500;
+    }
+
+    .pay-btn {
+      width: 100%;
+      margin-top: 25px;
+      background: #ff9500;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      padding: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: 0.3s;
+    }
+
+    .pay-btn:hover {
+      background: #ffa733;
+      transform: scale(1.05);
+    }
+
+    .processing {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .loader {
+      border: 5px solid #222;
+      border-top: 5px solid #ff9500;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 15px;
+    }
+
+    .success {
+      display: none;
+      text-align: center;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .success i {
+      font-size: 3rem;
+      color: #00ff90;
+      margin-bottom: 15px;
+    }
+
+    .success h3 {
+      color: #ff9500;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .success button {
+      margin-top: 15px;
+      padding: 12px 25px;
+      background: #ff9500;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .success button:hover {
+      background: #ffa733;
+      transform: scale(1.05);
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+  <header>GostWears Secure Payment</header>
+
+  <div class="payment-container" id="paymentSection">
+    <h2>Confirm Payment</h2>
+    <div class="summary">
+      <p><strong>Order Total:</strong> ₹<span id="orderTotal">0</span></p>
+      <p><strong>Payment Method:</strong> <span id="paymentMethod">—</span></p>
+    </div>
+
+    <div id="paymentOptions">
+      <div class="payment-option active" data-method="upi">
+        <span><i class="bx bx-qr"></i> UPI (Google Pay / PhonePe)</span>
+        <i class="bx bx-check-circle"></i>
+      </div>
+      <div class="payment-option" data-method="card">
+        <span><i class="bx bx-credit-card"></i> Credit / Debit Card</span>
+        <i class="bx bx-chevron-right"></i>
+      </div>
+      <div class="payment-option" data-method="cod">
+        <span><i class="bx bx-money"></i> Cash on Delivery</span>
+        <i class="bx bx-chevron-right"></i>
+      </div>
+    </div>
+
+    <button class="pay-btn" onclick="processPayment()">Pay Now</button>
+  </div>
+
+  <div class="processing" id="processingSection">
+    <div class="loader"></div>
+    <h3>Processing your payment...</h3>
+    <p>Please do not refresh the page.</p>
+  </div>
+
+  <div class="success" id="successSection">
+    <i class="bx bx-check-circle"></i>
+    <h3>Payment Successful!</h3>
+    <p>Thank you for shopping with GostWears.</p>
+    <button onclick="finishOrder()">Continue Shopping</button>
+  </div>
+
+  <script>
+    const total = localStorage.getItem("orderTotal") || 0;
+    const paymentMethod = localStorage.getItem("paymentMethod") || "UPI";
+    document.getElementById("orderTotal").textContent = total;
+    document.getElementById("paymentMethod").textContent = paymentMethod.toUpperCase();
+
+    const paymentOptions = document.querySelectorAll(".payment-option");
+    paymentOptions.forEach(opt => {
+      opt.addEventListener("click", () => {
+        paymentOptions.forEach(o => o.classList.remove("active"));
+        opt.classList.add("active");
+      });
+    });
+
+    function processPayment() {
+      document.getElementById("paymentSection").style.display = "none";
+      document.getElementById("processingSection").style.display = "flex";
+
+      // Simulate payment processing delay
+      setTimeout(() => {
+        document.getElementById("processingSection").style.display = "none";
+        document.getElementById("successSection").style.display = "block";
+
+        // Optional: clear cart after success
+        localStorage.removeItem("cart");
+      }, 3000);
+    }
+
+    function finishOrder() {
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>
