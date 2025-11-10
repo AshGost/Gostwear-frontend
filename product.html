@@ -228,36 +228,33 @@
   </section>
 
   <script>
-    
   const params = new URLSearchParams(window.location.search);
-  const productId = params.get('id');
-  const backendURL = "https://gostwear-backend.onrender.com/api/products"; // 🔥 change this if your backend URL is different
+  const productId = params.get("id");
+  const backendURL = "https://gostwear-backend.onrender.com/api/products"; // change if your backend URL differs
 
   let qty = 1;
   const quantityElement = document.getElementById("quantity");
 
-  // ✅ Fetch products directly from backend (no localStorage dependency)
   fetch(backendURL)
     .then(res => res.json())
     .then(data => {
-      // Find the current product
+      console.log("✅ Products Loaded:", data.length);
+
+      // Find current product
       const product = data.find(p => p.id === productId);
       if (!product) {
         document.getElementById("productName").textContent = "Product Not Found";
         return;
       }
 
-      // Set main product details
+      // Display product details
       document.getElementById("productName").textContent = product.name;
       document.getElementById("productPrice").textContent = "₹" + product.price;
       document.getElementById("productImage").src = product.image;
       document.getElementById("productDescription").textContent =
         "Premium " + product.name + " by GostWears. Crafted for power, precision, and street luxury.";
 
-      // Store all products for suggestions
-      localStorage.setItem("allProducts", JSON.stringify(data));
-
-      // Generate 4 random suggested products
+      // Suggested products
       const suggestGrid = document.getElementById("suggestGrid");
       const suggestions = data
         .filter(p => p.id !== productId)
@@ -276,7 +273,7 @@
         suggestGrid.appendChild(div);
       });
 
-      // Cart functions
+      // Cart logic
       window.changeQty = function(action) {
         if (action === "increase") qty++;
         else if (action === "decrease" && qty > 1) qty--;
@@ -302,6 +299,7 @@
       document.getElementById("productName").textContent = "Failed to load product.";
     });
 </script>
+
 
   
 </body>
