@@ -212,43 +212,65 @@
   </footer>
 
   <!-- ===== PRODUCT RENDER SCRIPT ===== -->
-  <script>
-    const BACKEND_URL = "https://gostwear-backend.onrender.com/api/products";
+<script>
+  const BACKEND_URL = "https://gostwear-backend.onrender.com/api/products";
 
-    async function fetchProducts() {
+  async function fetchProducts() {
+    try {
+      // 👇 Force browser to fetch fresh data every time (bypass old cache)
+      const res = await fetch(BACKEND_URL, { cache: "no-store" });
+      const products = await res.json();
+
+      // ✅ Save only verified products (where image URL actually works)
+      const verified = await validateImages(products);
+
+      localStorage.setItem("allProducts", JSON.stringify(verified));
+
+      renderProducts("men", "men-grid", verified);
+      renderProducts("women", "women-grid", verified);
+      renderProducts("kids", "kids-grid", verified);
+    } catch (err) {
+      console.error("❌ Failed to fetch products:", err);
+    }
+  }
+
+  // 🧠 Function to validate image URLs before rendering
+  async function validateImages(products) {
+    const checks = products.map(async (p) => {
       try {
-        const res = await fetch(BACKEND_URL);
-        const products = await res.json();
-
-        localStorage.setItem("allProducts", JSON.stringify(products));
-
-        renderProducts("men", "men-grid", products);
-        renderProducts("women", "women-grid", products);
-        renderProducts("kids", "kids-grid", products);
-      } catch (err) {
-        console.error("❌ Failed to fetch products:", err);
+        const res = await fetch(p.image, { method: "HEAD" });
+        if (res.ok) return p;
+        else {
+          console.warn("⚠️ Broken image:", p.image);
+          return { ...p, image: "assets/img/placeholder.png" }; // fallback image
+        }
+      } catch {
+        return { ...p, image: "assets/img/placeholder.png" };
       }
-    }
+    });
+    return Promise.all(checks);
+  }
 
-    function renderProducts(category, containerId, products) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = "";
-      const filtered = products.filter(p => p.category === category);
+  function renderProducts(category, containerId, products) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = "";
+    const filtered = products.filter(p => p.category === category);
 
-      filtered.forEach(p => {
-        const card = document.createElement("div");
-        card.classList.add("product-card");
-        card.innerHTML = `
-          <a href="product.html?id=${p.id}">
-            <img src="${p.image}" alt="${p.name}">
-          </a>
-          <p>${p.name} – ₹${p.price}</p>
-        `;
-        container.appendChild(card);
-      });
-    }
+    filtered.forEach(p => {
+      const card = document.createElement("div");
+      card.classList.add("product-card");
+      card.innerHTML = `
+        <a href="product.html?id=${p.id}">
+          <img src="${p.image}" alt="${p.name}" onerror="this.src='assets/img/placeholder.png'">
+        </a>
+        <p>${p.name} – ₹${p.price}</p>
+      `;
+      container.appendChild(card);
+    });
+  }
 
-    fetchProducts();
-  </script>
+  fetchProducts();
+</script>
+
 </body>
 </html>
