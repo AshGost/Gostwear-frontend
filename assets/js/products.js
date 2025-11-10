@@ -1,56 +1,43 @@
-// Auto-detect local vs deployed backend
-const BACKEND_URL =
-  window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-    ? "http://localhost:5000/api/products"
-    : "https://gostwear-backend.onrender.com/api/products";
+const BACKEND_URL = window.location.hostname.includes("localhost")
+  ? "http://localhost:5000/api/products"
+  : "https://gostwear-backend.onrender.com/api/products";
 
-// Load and render products
-async function loadProducts() {
+async function fetchProducts() {
   try {
     const res = await fetch(BACKEND_URL);
-    if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
     const products = await res.json();
 
-    renderCategory(products, "men");
-    renderCategory(products, "women");
-    renderCategory(products, "kids");
+    // Auto-generate image path based on product ID
+    const finalProducts = products.map(p => ({
+      ...p,
+      image: `/img/${p.id}.png`,
+    }));
+
+    renderProducts(finalProducts, "men");
+    renderProducts(finalProducts, "women");
+    renderProducts(finalProducts, "kids");
   } catch (err) {
     console.error("❌ Error fetching products:", err);
-    document.body.innerHTML += `<p style="text-align:center;color:red;">⚠️ Failed to load products. Please refresh.</p>`;
   }
 }
 
-function renderCategory(products, category) {
+function renderProducts(products, category) {
   const grid = document.getElementById(`${category}-grid`);
-  if (!grid) return;
+  grid.innerHTML = "";
 
-  const filtered = products.filter(p => p.category === category);
-  grid.innerHTML = filtered
-    .map(
-      p => `
-      <div class="product-card">
-        <img src="${p.image}" alt="${p.name}">
+  products
+    .filter(p => p.category === category)
+    .forEach(p => {
+      const div = document.createElement("div");
+      div.classList.add("product-card");
+      div.innerHTML = `
+        <a href="product.html?id=${p.id}">
+          <img src="${p.image}" alt="${p.name}" onerror="this.src='/img/placeholder.png'">
+        </a>
         <p>${p.name} – ₹${p.price}</p>
-        <button onclick="addToCart('${p.id}', '${p.name}', ${p.price}, '${p.image}')">
-          Add to Cart
-        </button>
-      </div>
-    `
-    )
-    .join("");
+      `;
+      grid.appendChild(div);
+    });
 }
 
-// =================== CART FUNCTION ===================
-function addToCart(id, name, price, image) {
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  const existing = cart.find(item => item.id === id);
-
-  if (existing) existing.qty += 1;
-  else cart.push({ id, name, price, image, qty: 1 });
-
-  localStorage.setItem("cart", JSON.stringify(cart));
-  alert(`🛒 ${name} added to cart!`);
-}
-
-// =================== INIT ===================
-loadProducts();
+fetchProducts();
