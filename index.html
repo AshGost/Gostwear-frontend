@@ -3,49 +3,252 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GostWears | Wear the Power</title>
+  <title>GostWears | Wear The Power</title>
 
-  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link href="https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      margin: 0;
+      background: #fff;
+      color: #000;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 60px;
+      background: #111;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+
+    header h1 {
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: #e50914;
+    }
+
+    .btn-red {
+      background: #e50914;
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .btn-white {
+      background: #fff;
+      color: #111;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    section {
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    .product-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .product-card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      width: 220px;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .product-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .product-card p {
+      margin: 10px 0;
+      font-weight: 500;
+    }
+
+    footer {
+      background: #111;
+      color: #aaa;
+      padding: 60px 20px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    footer h3 {
+      color: #fff;
+      margin-bottom: 30px;
+      letter-spacing: 1px;
+    }
+
+    footer img {
+      width: 90px;
+      opacity: 0.9;
+    }
+
+    footer a {
+      color: #ccc;
+      text-decoration: none;
+      margin: 0 10px;
+      transition: 0.3s;
+    }
+
+    footer a:hover {
+      color: #fff;
+    }
+  </style>
 </head>
+
 <body>
+  <!-- ===== HEADER ===== -->
   <header>
-    <div class="logo">GostWears</div>
+    <h1>GostWears</h1>
     <nav>
       <a href="#men">Men</a>
       <a href="#women">Women</a>
       <a href="#kids">Kids</a>
-      <a href="login.html" id="loginLink">Login</a>
-      <a href="register.html" id="registerLink" class="btn">Register</a>
+      <a href="#contact">Contact</a>
+
+      <a id="loginBtn" href="login.html" class="btn-red">Login</a>
+      <a id="registerBtn" href="register.html" class="btn-white">Register</a>
+
+      <span id="userInfo" style="display:none; color:#fff;">
+        Welcome, <span id="userName"></span> |
+        <a href="#" id="logoutBtn" style="color:#e50914; text-decoration:none;">Logout</a>
+      </span>
     </nav>
   </header>
 
-  <section class="hero">
-    <h1>Wear the Power</h1>
-    <p>Streetwear that speaks confidence, crafted for power and precision.</p>
-    <a href="#men" class="btn">Shop Now</a>
+  <!-- ===== HERO SECTION ===== -->
+  <section id="home" style="position:relative; height:80vh; display:flex; flex-direction:column; justify-content:center; align-items:center; color:#fff; overflow:hidden;">
+    <div style="background:url('assets/img/hero.webp') center/cover no-repeat; position:absolute; inset:0; z-index:0; filter:brightness(55%); transition:0.6s;"></div>
+    <div style="z-index:2; text-align:center;">
+      <h1 style="font-size:3rem; margin-bottom:10px;">Wear The Power</h1>
+      <p style="font-size:1.2rem; margin-bottom:25px;">Streetwear that speaks attitude</p>
+      <a href="#men" class="btn-red" style="padding:12px 36px;">Shop Now</a>
+    </div>
   </section>
 
-  <main>
-    <section id="men" class="product-section">
-      <h2>Men's Collection</h2>
-      <div id="men-grid" class="product-grid"></div>
-    </section>
+  <!-- ===== MEN COLLECTION ===== -->
+  <section id="men">
+    <h2 style="font-size:2rem; margin-bottom:40px;">Men's Collection</h2>
+    <div class="product-grid" id="men-grid"></div>
+  </section>
 
-    <section id="women" class="product-section alt-bg">
-      <h2>Women's Collection</h2>
-      <div id="women-grid" class="product-grid"></div>
-    </section>
+  <!-- ===== WOMEN COLLECTION ===== -->
+  <section id="women" style="background:#f4f4f4;">
+    <h2 style="font-size:2rem; margin-bottom:40px;">Women's Collection</h2>
+    <div class="product-grid" id="women-grid"></div>
+  </section>
 
-    <section id="kids" class="product-section">
-      <h2>Kids Collection</h2>
-      <div id="kids-grid" class="product-grid"></div>
-    </section>
-  </main>
+  <!-- ===== KIDS COLLECTION ===== -->
+  <section id="kids">
+    <h2 style="font-size:2rem; margin-bottom:40px;">Kids Collection</h2>
+    <div class="product-grid" id="kids-grid"></div>
+  </section>
 
+  <!-- ===== NEWSLETTER ===== -->
+  <section id="contact" style="background:#111; color:#fff;">
+    <h2>Join Our Newsletter</h2>
+    <p>Get updates about latest drops and exclusive discounts</p>
+    <input type="email" placeholder="Enter your email" style="padding:12px; width:250px; border:none; border-radius:6px; margin-top:20px;">
+    <button style="padding:12px 25px; margin-left:10px; background:#fff; color:#111; border:none; border-radius:6px; cursor:pointer;">Subscribe</button>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
   <footer>
-    <p>© 2025 GostWears. All Rights Reserved.</p>
+    <h3>Trusted By</h3>
+    <div style="display:flex; justify-content:center; align-items:center; gap:60px; flex-wrap:wrap; margin-bottom:30px;">
+      <img src="assets/img/logo1.png" alt="Brand 1">
+      <img src="assets/img/logo2.png" alt="Brand 2">
+      <img src="assets/img/logo3.png" alt="Brand 3">
+      <img src="assets/img/logo4.png" alt="Brand 4">
+    </div>
+    <hr style="border:none; height:1px; background:#333; width:80%; margin:40px auto;">
+    <p>© 2025 <strong>GostWears</strong> — Designed by Ash | SBL Project</p>
+    <div>
+      <a href="#">Instagram</a> |
+      <a href="#">Twitter</a> |
+      <a href="#">YouTube</a>
+    </div>
   </footer>
 
-  <script src="scripts/products.js"></script>
+  <!-- ===== PRODUCT RENDER SCRIPT ===== -->
+  <script>
+    const BACKEND_URL = "https://gostwear-backend.onrender.com/api/products";
+
+    async function fetchProducts() {
+      try {
+        const res = await fetch(BACKEND_URL);
+        const products = await res.json();
+
+        localStorage.setItem("allProducts", JSON.stringify(products));
+
+        renderProducts("men", "men-grid", products);
+        renderProducts("women", "women-grid", products);
+        renderProducts("kids", "kids-grid", products);
+      } catch (err) {
+        console.error("❌ Failed to fetch products:", err);
+      }
+    }
+
+    function renderProducts(category, containerId, products) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = "";
+      const filtered = products.filter(p => p.category === category);
+
+      filtered.forEach(p => {
+        const card = document.createElement("div");
+        card.classList.add("product-card");
+        card.innerHTML = `
+          <a href="product.html?id=${p.id}">
+            <img src="${p.image}" alt="${p.name}">
+          </a>
+          <p>${p.name} – ₹${p.price}</p>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    fetchProducts();
+  </script>
 </body>
 </html>
