@@ -213,18 +213,27 @@
 
   <!-- ===== PRODUCT RENDER SCRIPT ===== -->
   <script>
-    const BACKEND_URL = "https://gostwear-backend.onrender.com/api/products";
+    const BACKEND_URL = 
+      window.location.hostname.includes("localhost")
+        ? "http://localhost:5000/api/products"
+        : "https://gostwear-backend.onrender.com/api/products";
 
     async function fetchProducts() {
       try {
         const res = await fetch(BACKEND_URL);
         const products = await res.json();
 
-        localStorage.setItem("allProducts", JSON.stringify(products));
+        // Auto-generate image path for each product
+        const finalProducts = products.map(p => ({
+          ...p,
+          image: `/img/${p.id}.png` // ensure lowercase .png inside /public/img/
+        }));
 
-        renderProducts("men", "men-grid", products);
-        renderProducts("women", "women-grid", products);
-        renderProducts("kids", "kids-grid", products);
+        localStorage.setItem("allProducts", JSON.stringify(finalProducts));
+
+        renderProducts("men", "men-grid", finalProducts);
+        renderProducts("women", "women-grid", finalProducts);
+        renderProducts("kids", "kids-grid", finalProducts);
       } catch (err) {
         console.error("❌ Failed to fetch products:", err);
       }
@@ -240,7 +249,7 @@
         card.classList.add("product-card");
         card.innerHTML = `
           <a href="product.html?id=${p.id}">
-            <img src="${p.image}" alt="${p.name}">
+            <img src="${p.image}" alt="${p.name}" onerror="this.src='/img/placeholder.png'">
           </a>
           <p>${p.name} – ₹${p.price}</p>
         `;
@@ -248,7 +257,30 @@
       });
     }
 
-    fetchProducts();
+    // ===== USER LOGIN STATE MANAGEMENT =====
+    document.addEventListener("DOMContentLoaded", () => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const loginBtn = document.getElementById("loginBtn");
+      const registerBtn = document.getElementById("registerBtn");
+      const userInfo = document.getElementById("userInfo");
+      const userName = document.getElementById("userName");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      if (user) {
+        loginBtn.style.display = "none";
+        registerBtn.style.display = "none";
+        userInfo.style.display = "inline";
+        userName.textContent = user.name;
+      }
+
+      logoutBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        localStorage.removeItem("user");
+        window.location.reload();
+      });
+
+      fetchProducts();
+    });
   </script>
 </body>
 </html>
